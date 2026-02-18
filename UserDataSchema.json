@@ -196,6 +196,23 @@
         }
       }
     },
+    "today_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["meal_name", "recipe_id", "calories", "protein", "fat", "carbs", "fiber", "timestamp"],
+        "properties": {
+          "meal_name": { "type": "string" },
+          "recipe_id": { "type": "string" },
+          "calories": { "type": "number" },
+          "protein": { "type": "number" },
+          "fat": { "type": "number" },
+          "carbs": { "type": "number" },
+          "fiber": { "type": "number" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
 
     "created_at": {
       "type": "string",
