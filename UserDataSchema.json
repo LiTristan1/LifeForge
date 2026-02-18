@@ -1,0 +1,210 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "age",
+    "gender",
+    "height",
+    "weight",
+    "units_preference",
+    "goal_type",
+    "targets",
+    "diet",
+    "preferences",
+    "lifestyle",
+    "history"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+
+    "name": {
+      "type": "string"
+    },
+
+    "age": {
+      "type": "integer"
+    },
+
+    "gender": {
+      "type": "string",
+      "enum": ["male", "female", "non_binary", "prefer_not_to_say", "other"]
+    },
+
+    "height": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["cm", "in"]
+        }
+      }
+    },
+
+    "weight": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["kg", "lb"]
+        }
+      }
+    },
+
+    "units_preference": {
+      "type": "string",
+      "enum": ["metric", "imperial"]
+    },
+
+    "goal_type": {
+      "type": "string",
+      "enum": [
+        "lose_weight",
+        "maintain",
+        "gain_weight",
+        "build_muscle",
+        "performance",
+        "general_health"
+      ]
+    },
+
+    "targets": {
+      "type": "object",
+      "required": ["calories_kcal", "protein_g", "fat_g"],
+      "properties": {
+        "calories_kcal": {
+          "type": "integer"
+        },
+        "protein_g": {
+          "type": "number"
+        },
+        "fat_g": {
+          "type": "number"
+        },
+        "carbs_g": {
+          "type": "number"
+        },
+        "sugar_g": {
+          "type": "number"
+        },
+        "fiber_g": {
+          "type": "number"
+        },
+        "salt_mg": {
+          "type": "number"
+        },
+        "water_ml": {
+          "type": "integer"
+        },
+        "sleep_hours": {
+          "type": "number"
+        }
+      }
+    },
+
+    "diet": {
+      "type": "object",
+      "required": ["diet_type", "allergies"],
+      "properties": {
+        "diet_type": {
+          "type": "string",
+          "enum": ["none", "vegetarian", "vegan", "halal", "kosher", "keto"]
+        },
+        "allergies": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        }
+      }
+    },
+
+    "preferences": {
+      "type": "object",
+      "required": ["disliked_foods", "cravings"],
+      "properties": {
+        "disliked_foods": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "cravings": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "preferred_cuisines": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        }
+      }
+    },
+
+    "lifestyle": {
+      "type": "object",
+      "required": ["meals_per_day", "activity_level"],
+      "properties": {
+        "meals_per_day": {
+          "type": "integer"
+        },
+        "activity_level": {
+          "type": "string",
+          "enum": ["sedentary", "light", "moderate", "active", "very_active"]
+        },
+        "workout_days_per_week": {
+          "type": "integer"
+        }
+      }
+    },
+
+    "history": {
+      "type": "object",
+      "required": ["recipe_history"],
+      "properties": {
+        "recipe_history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["recipe_id", "timestamp"],
+            "properties": {
+              "recipe_id": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "rating": {
+                "type": "integer"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
