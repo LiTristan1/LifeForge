@@ -1,29 +1,8 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
+from routes.foodNutrition import foodNutrition_router
+from routes.humanInfo import human_health_router
+from routes.ai import ai_router
 app = FastAPI()
-
-
-class userdata(BaseModel):
-    name: str
-    username: str
-    age: int
-    height: int
-    activityLevel: int
-    budget: int
-    dietaryRestrictions: []
-    mealsPerDay: int
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str | None = None):
-    return {"item_id": item_id, "q":q}
-
-@app.put("/setup")
-def initData(data: userdata):
-    return {data}
-
-
-
+app.include_router(foodNutrition_router, prefix = '/food')
+app.include_router(human_health_router, prefix = '/human')
+app.include_router(ai_router, prefix = '/ai')
