@@ -1,10 +1,28 @@
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, Any, List
+from google import genai
+from dotenv import load_dotenv
 
+import json
 
+load_dotenv()
+SCHEMA_PATH = Path("RecipeSchema.json")
+MODEL_NAME = "gemini-3-flash-preview"
+
+try:
+    with open(SCHEMA_PATH, "r", encoding="utf-8") as f:
+        RECIPE_SCHEMA = json.load(f)
+except FileNotFoundError:
+    print(f"Warning: {SCHEMA_PATH} not found. Ensure the file exists.")
+    RECIPE_SCHEMA = {}
+
+client = genai.Client()
 def _join(items: List[str], sep=", ") -> str:
-    items = [x.strip() for x in items if isinstance(x, str) and x.strip()]
-    return sep.join(items)
+    if not items:
+            return "none"
+    cleaned = [str(x).strip() for x in items if x and str(x).strip()]
+    return sep.join(cleaned) if cleaned else "none"
 
 
 def build_recipe_prompt(meal: str, user: Dict[str, Any]) -> str:
@@ -122,3 +140,26 @@ Return only the recipe (no extra commentary).
 """.strip()
 
     return prompt
+
+
+def generate_recipe(meal: str, user: Dict[str, Any]) -> Dict[str, Any]:
+    prompt = build_recipe_prompt(meal, user)
+    
+    try:
+        response = client.models.generate_content(
+            model=MODEL_NAME,
+            contents=prompt,
+            config={
+                "response_mime_type": "application/json",
+                "response_json_schema": RECIPE_SCHEMA,
+            },
+        )
+        
+        if hasattr(response, 'parsed') and response.parsed:
+            return response.parsed
+            
+        return json.loads(response.text)
+        
+    except Exception as e:
+        print(f"Error generating recipe: {e}")
+        return None
